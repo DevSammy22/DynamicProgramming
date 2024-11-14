@@ -1,48 +1,59 @@
+#totally mine
 def longest_common_subsequence(A, B):
     n = len(A)
     m = len(B)
-
-    # Step 1: Initialize the opt and pi tables with zeros
     opt = [[0] * (m + 1) for _ in range(n + 1)]
-    pi = [[''] * (m + 1) for _ in range(n + 1)]  # To store directions
+    b = [[""] * (m + 1) for _ in range(n + 1)]
 
-    # Step 2: Fill the opt table according to the pseudocode
-    for i in range(1, n + 1):
-        for j in range(1, m + 1):
-            if A[i - 1] == B[j - 1]:  # Match found
+    for i in range(1, (n + 1)):
+        for j in range(1, (m + 1)):
+            if A[i - 1] == B[j - 1]:
                 opt[i][j] = opt[i - 1][j - 1] + 1
-                pi[i][j] = "diag"  # Diagonal arrow meaning we took a match
-            elif opt[i][j - 1] >= opt[i - 1][j]:  # Left is better or equal
+                b[i][j] = "diagonal"
+
+            elif opt[i][j - 1] >= opt[i - 1][j]:
                 opt[i][j] = opt[i][j - 1]
-                pi[i][j] = "left"  # Left arrow meaning we skipped an element in B
-            else:  # Top is better
+                b[i][j] = "left"
+
+            else:
                 opt[i][j] = opt[i - 1][j]
-                pi[i][j] = "up"  # Up arrow meaning we skipped an element in A
+                b[i][j] = "up"
 
-    # Step 3: Recover the LCS from the pi table
-    def recover_LCS():
-        lcs = []
-        i, j = n, m
-        while i > 0 and j > 0:
-            if pi[i][j] == "diag":  # Diagonal: part of the LCS
-                lcs.append(A[i - 1])
-                i -= 1
-                j -= 1
-            elif pi[i][j] == "left":  # Move left
-                j -= 1
-            else:  # Move up
-                i -= 1
-        return ''.join(reversed(lcs))  # Reversing because we built it backwards
+    return opt, b
 
-    # Step 4: Get the LCS length and sequence
-    lcs_length = opt[n][m]
-    lcs_sequence = recover_LCS()
+def recover_optimal_solution(A, B, b):
+    n = len(A)
+    m = len(B)
+    i = n
+    j = m
+    selected_strings = []
+    while i > 0 and j > 0:
+        if b[i][j] == "diagonal":
+            selected_strings.append(A[i - 1])
+            i = i - 1
+            j = j - 1
 
-    return lcs_length, lcs_sequence
+        elif b[i][j] == "left":
+            j = j - 1
+
+        else:
+            i = i - 1
+
+    selected_strings.reverse()
+
+    return "".join(selected_strings)
+
+def lcs_solution(A, B):
+    opt, b = longest_common_subsequence(A, B)
+    lcs_character = recover_optimal_solution(A, B, b)
+    lcs_length = opt[len(A)][len(B)]
+
+    return lcs_character, lcs_length
+
 
 # Example usage
 A = "ABCBDAB"
 B = "BDCAB"
-lcs_length, lcs_sequence = longest_common_subsequence(A, B)
-print("LCS Length:", lcs_length)
-print("LCS Sequence:", lcs_sequence)
+lcs_character, lcs_length = lcs_solution(A, B)
+print("LCS length:", lcs_length)
+print("LCS character:", lcs_character)
