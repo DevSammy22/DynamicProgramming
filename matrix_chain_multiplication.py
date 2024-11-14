@@ -1,4 +1,5 @@
 #mine
+import sys
 def matrix_chain_multiplication(dims):
     n = len(dims) - 1
     opt = [[0] * (n + 1) for _ in range(n + 1)]
@@ -7,7 +8,8 @@ def matrix_chain_multiplication(dims):
     for length in range(2, (n + 1)):
         for i in range(1, (n - length) + 2):
             j = i + (length - 1)
-            opt[i][j] = float("inf")
+            #opt[i][j] = float("inf")
+            opt[i][j] = sys.maxsize # to set the infinity initially
 
             for k in range(i, j):
                 cost_of_multiplication = opt[i][k] + opt[k + 1][j] + dims[i - 1] * dims[k] * dims[j]
