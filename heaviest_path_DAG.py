@@ -9,7 +9,12 @@ def heaviest_path(edges, n):
 
     for i in range(1, (n + 1)):
         for (v, w) in adj[i]:
-            f[v] = max(f[v], f[i] + w)
+
+            if f[v] < (f[i] + w):
+                f[v] = f[i] + w
+            else:
+                f[v] = f[v]
+            #f[v] = max(f[v], f[i] + w)
 
     return f[1:], max(f[1:])
 
