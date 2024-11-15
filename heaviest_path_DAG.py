@@ -25,5 +25,5 @@ edges = [
 ]
 
 heaviest_path_list, max_heaviest_path = heaviest_path(edges, n)
-print(""heaviest_path_list)
-print(max_heaviest_path)
+print("The list of heaviest path: ", heaviest_path_list)
+print("Maximum heaviest path: ", max_heaviest_path)
